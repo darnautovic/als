@@ -2,18 +2,41 @@ package domain
 
 import org.joda.time.DateTime
 
-case class Licence
-(
-  id            :Long,
-  serialId      :Long,
-  createdOn     :DateTime,
-  active        :Boolean,
-  keys          :Keys,
-  licenceHash   :String
-)
+object Licence
+{
+  case class Full
+  (
+    id             :Long,
+    serialNumberId :Long,
+    createdOn      :DateTime,
+    active         :Boolean,
+    keys           :Keys,
+    licenceHash    :String
+  )
 
-case class Keys
-(
-  publicKey   :String,
-  privateKey  :String
-)
+  case class Create
+  (
+    serialNumberId :Long,
+    createdOn      :DateTime,
+    active         :Boolean,
+    keys           :Keys,
+    licenceHash    :String
+  )
+
+  case class Edit
+  (
+    id             :Long,
+    serialNumberId :Long,
+    createdOn      :DateTime,
+    active         :Boolean,
+    keys           :Keys,
+    licenceHash    :String
+  )
+
+  case class Keys
+  (
+    publicKey   :String,
+    privateKey  :String
+  )
+}
+

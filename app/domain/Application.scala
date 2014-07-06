@@ -1,9 +1,26 @@
 package domain
 
-case class Application
-(
-  id      :Long,
-  name    :String,
-  version :String,
-  userId  :Long
-)
+object Application
+{
+  case class Full
+  (
+    id      :Long,
+    name    :String,
+    version :String,
+    userId  :Long
+  )
+
+  case class Create
+  (
+    name    :String,
+    version :String,
+    userId  :Long
+  )
+
+  case class Edit
+  (
+    name    :String,
+    version :String,
+    userId  :Long
+    )
+}

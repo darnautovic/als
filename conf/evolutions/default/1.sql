@@ -32,7 +32,6 @@ CREATE TABLE licenses (
    serial_id             INTEGER NOT NULL,
    created_on            VARCHAR(64) NOT NULL,
    active                VARCHAR(64) NOT NULL,
-   keys                  VARCHAR(64) NOT NULL,
    licence_hash          VARCHAR(64) NOT NULL,
    public_key            VARCHAR(64) NOT NULL,
    private_key           VARCHAR(64) NOT NULL,
