@@ -6,7 +6,7 @@ import domain.Serial
 import module.serial.dao.SerialDao
 import play.api.db.DB
 import shared.DataSource
-import shared.utils.DateUtils
+import shared.utils.date.DateUtils
 
 
 class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {

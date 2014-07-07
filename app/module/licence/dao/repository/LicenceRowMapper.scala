@@ -7,7 +7,7 @@ import domain.Licence.Keys
 import domain.Licence
 import anorm.SqlParser._
 import anorm.~
-import shared.utils.DateUtils
+import shared.utils.date.DateUtils
 
 object LicenceRowMapper {
   val full = {

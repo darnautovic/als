@@ -1,6 +1,7 @@
 package module.user.dao
 
 import domain.User
+import domain.authentication.LoginCredentials
 
 trait UserDao
 {
@@ -9,6 +10,8 @@ trait UserDao
   def findAll: Seq[User.Full]
   def findById(id: Long): Option[User.Full]
   def findByUsername(username: String): Option[User.Full]
+  def findByCredentials(credentials: LoginCredentials): Option[User.Full]
+  def changePassword(credentials: LoginCredentials)
 }
 
 

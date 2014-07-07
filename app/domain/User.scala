@@ -24,7 +24,8 @@ object User
   case class Edit
   (
     id: Long,
-    password  : String,
+    password       : Option[String],
+    retypedPassword: Option[String],
     firstName : String,
     lastName  : String,
     email     : String

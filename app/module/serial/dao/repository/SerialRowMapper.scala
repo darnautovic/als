@@ -6,7 +6,7 @@ import play.api.Play.current
 import anorm.SqlParser._
 import anorm.~
 import domain.Serial
-import shared.utils.DateUtils
+import shared.utils.date.DateUtils
 
 object SerialRowMapper {
   val full = {

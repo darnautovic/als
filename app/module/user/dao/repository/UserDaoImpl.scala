@@ -1,5 +1,6 @@
 package module.user.dao.repository
 
+import domain.authentication.LoginCredentials
 import play.api.Play.current
 import anorm._
 import domain.User
@@ -59,7 +60,30 @@ class UserDaoImpl(val dataSource: DataSource) extends UserDao {
         FIND_BY_USERNAME_QUERY.on("wantedValue" -> username).as[Option[User.Full]](UserRowMapper.full.singleOpt)
       }
     }
+
+  def findByCredentials(credentials: LoginCredentials): Option[User.Full] =
+  {
+
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_CREDENTIALS_QUERY.on(
+        "username" -> credentials.username,
+        "password" -> credentials.password
+      ).as[Option[User.Full]](UserRowMapper.full.singleOpt)
+    }
   }
+
+  def changePassword(credentials: LoginCredentials)
+  {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      CHANGE_PASSWORD_QUERY.on(
+        "username"                  -> credentials.username,
+        "password"                  -> credentials.password,
+        "changePasswordOnNextLogin" -> false
+      )
+        .executeUpdate()
+    }
+  }
+}
 
   object UserDaoImpl {
     val INSERT_USER_QUERY: SqlQuery = SQL(
@@ -95,10 +119,23 @@ class UserDaoImpl(val dataSource: DataSource) extends UserDao {
       | """.
       stripMargin
 
+  val CHANGE_PASSWORD_QUERY =  SQL(
+    """
+      | UPDATE users
+      | SET
+      |   password={password},
+      |   change_password_on_next_login={changePasswordOnNextLogin}
+      | WHERE
+      | username={username}
+    """.stripMargin)
+
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_USERS + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
   val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_USERS + " WHERE users.id={wantedValue}")
 
   val FIND_BY_USERNAME_QUERY: SqlQuery = SQL(SELECT_FROM_USERS + " WHERE users.username={wantedValue}")
+
+  val FIND_BY_CREDENTIALS_QUERY: SqlQuery = SQL(SELECT_FROM_USERS + " WHERE users.username={username} AND users.password={password}")
+
   }
 

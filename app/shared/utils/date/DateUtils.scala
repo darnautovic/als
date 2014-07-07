@@ -1,4 +1,4 @@
-package shared.utils
+package shared.utils.date
 
 import java.util.Date
 

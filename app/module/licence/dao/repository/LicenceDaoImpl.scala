@@ -6,7 +6,7 @@ import domain.Licence
 import module.licence.dao.LicenceDao
 import play.api.db.DB
 import shared.DataSource
-import shared.utils.DateUtils
+import shared.utils.date.DateUtils
 
 class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao{
 
