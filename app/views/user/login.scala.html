@@ -1,0 +1,106 @@
+@(model: models.user.models.user.authentication.LoginModel)
+
+@import helper._
+@import play.api.i18n.Lang._
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login - Bootstrap Admin Template</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link href="/assets/stylesheets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/stylesheets/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="/assets/stylesheets/css/font-awesome.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+
+    <link href="/assets/stylesheets/css/style.css" rel="stylesheet" type="text/css">
+    <link href="/assets/stylesheets/css/pages/signin.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+  @helper.form(action = controllers.api.web.user.authentication.routes.AuthenticationController.login, 'class -> "form-horizontal") {
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="index.html">
+                    Application Licence Service
+                </a>
+                <div class="nav-collapse">
+                    <ul class="nav pull-right">
+
+                        <li class="">
+                            <a href="signup.html" class="">
+                                Don't have an account?
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="index.html" class="">
+                                <i class="icon-chevron-left"></i>
+                                Back to Homepage
+                            </a>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div> <!-- /container -->
+        </div> <!-- /navbar-inner -->
+    </div> <!-- /navbar -->
+    <div class="account-container">
+        <div class="content clearfix">
+            <form action="#" method="post">
+                <h1>ALS Service Login</h1>
+                <div class="login-fields">
+                    <p>Please provide your details</p>
+                    <div class="field">
+                        <label for="username">Username</label>
+                        @inputText(
+                        model.form("username"),
+                        'class -> "login username-field",
+                        'placeholder            -> "Username",
+                        '_required              -> true,
+                        '_showConstraints       -> false
+                        )
+                    </div> <!-- /field -->
+                    <div class="field">
+                        <label for="password">Password:</label>
+                        @inputPassword(
+                        model.form("password"),
+                        'class -> "login password-field",
+                        'placeholder            -> "Password",
+                        '_required              -> true,
+                        '_showConstraints       -> false
+                        )
+                    </div> <!-- /password -->
+                </div> <!-- /login-fields -->
+                <div class="login-actions">
+				<span class="login-checkbox">
+					<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
+				</span>
+                    <button class="button btn btn-success btn-large">Sign In</button>
+                </div> <!-- .actions -->
+            </form>
+        </div> <!-- /content -->
+    </div> <!-- /account-container -->
+    <div class="login-extra">
+        <a href="#">Create user account</a>
+    </div> <!-- /login-extra -->
+    <script src="/assets/javascripts/js/jquery-1.7.2.min.js"></script>
+    <script src="/assets/javascripts/js/bootstrap.js"></script>
+    <script src="/assets/javascripts/js/signin.js"></script>
+</body>
+</html>
+    }
+
+
+

@@ -1,11 +1,12 @@
 package controllers
 
-import play.api._
-import play.api.mvc._
+import controllers.api.web.shared.AlsController
 
-object Application extends Controller {
+object Application extends AlsController {
 
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+  def index = AuthenticatedAction {
+    implicit requestWithSession =>
+
+        Ok(views.html.index("LoggedIn"))
   }
 }

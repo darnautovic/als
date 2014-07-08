@@ -6,4 +6,9 @@
 GET     /                           controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file           controllers.Assets.at(path="/public", file)
+
+# Web Authentication
+GET     /user/login       controllers.api.web.user.authentication.AuthenticationController.showLoginPage
+POST    /user/login       controllers.api.web.user.authentication.AuthenticationController.login
+GET     /user/logout      controllers.api.web.user.authentication.AuthenticationController.logout

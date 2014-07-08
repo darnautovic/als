@@ -1,8 +1,13 @@
 //package controllers.api.web.user
 //
+//import com.als.module.registry.ServiceRegistry
 //import play.api.Play.current
+//import play.api.mvc.Action
 //
 //object UserController {
+//
+//  private val authenticationService = ServiceRegistry.webAuthenticationService
+//
 //
 //  def showLoginPage = Action
 //  {
@@ -12,8 +17,6 @@
 //  def login = Action
 //  {
 //    implicit request =>
-//
-//      val configuration = play.api.Play.configuration
 //
 //      val form = LoginForm.form.bindFromRequest
 //
