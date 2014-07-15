@@ -7,17 +7,20 @@ import com.als.shared.DataSource
 import anorm._
 import play.api.db.DB
 
-class ApplicationDaoImpl(val dataSource: DataSource) extends ApplicationDao {
+class   ApplicationDaoImpl(val dataSource: DataSource) extends ApplicationDao {
 
 
   import ApplicationDaoImpl._
 
-  def insert(item: Application.Create): Long = {
+  def insert(userId :Long, item: Application.Create): Long = {
     DB.withTransaction(dataSource.getName) {
       implicit connection =>
 
+        val keysId: Option[Long] = insertKeys(item).executeInsert()
+
         val generatedId: Option[Long] = INSERT_APPLICATION_QUERY.on(
-          "user_id"     -> item.userId,
+          "userId"     -> userId,
+          "keyId"     -> keysId.get,
           "name"        -> item.name,
           "version"     -> item.version
         ).executeInsert()
@@ -39,17 +42,21 @@ class ApplicationDaoImpl(val dataSource: DataSource) extends ApplicationDao {
       FIND_BY_ID_QUERY.on("wantedValue" -> id).as[Option[Application.Full]](ApplicationRowMapper.full.singleOpt)
     }
   }
+
+  def findAllByUserId(userId: Long): Seq[Application.Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_USER_ID_QUERY.on("wantedValue" -> userId).as[Seq[Application.Full]](ApplicationRowMapper.full*)
+    }
+  }
 }
 
 object ApplicationDaoImpl {
   val INSERT_APPLICATION_QUERY: SqlQuery = SQL(
     """
-      | INSERT INTO users
-      |   (external_id,       username,   password,   first_name,  middle_name,  last_name,  email,   phone,   mobile,
-      |   skype,   notes,   is_credit_officer, change_password_on_next_login, organisation_structure_node_id, top_visible_node_id)
+      | INSERT INTO applications
+      |   (user_id,  key_id,   name,   version)
       | VALUES
-      |   ({externalId}, {username}, {password}, {firstName}, {middleName}, {lastName}, {email}, {phone}, {mobile},
-      |   {skype}, {notes}, {isCreditOfficer}, {changePasswordOnNextLogin},    {organisationStructureNodeId}, {topVisibleNodeId})
+      |   ({userId}, {keyId}, {name}, {version})
     """.
       stripMargin)
 
@@ -67,16 +74,21 @@ object ApplicationDaoImpl {
 
   val SELECT_FROM_APPLICATIONS =
     """
-      | SELECT
-      |   users.* ,
-      |   org.parent_id AS parent_organization_node_id
-      | FROM users
-      | JOIN organisation_structure_nodes AS org ON org.id=users.organisation_structure_node_id
+      | SELECT * FROM applications
+      | JOIN users as usr  ON usr.id = applications.user_id
+      | JOIN keys  as key  ON key.id = applications.key_id
       | """.
       stripMargin
 
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
-  val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + " WHERE users.id={wantedValue}")
+  val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + " WHERE applications.id={wantedValue}")
+  val FIND_BY_USER_ID_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + " WHERE usr.id = {wantedValue}")
+
+  def insertKeys(item :Application.Create) =
+  {
+    SQL("INSERT INTO keys (public_key, private_key) VALUES ({publicKey}, {privateKey})")
+      .on("publicKey"   -> item.publicKey.get, "privateKey" -> item.privateKey.get)
+  }
 }
 

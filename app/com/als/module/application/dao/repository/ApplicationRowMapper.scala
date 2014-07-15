@@ -9,18 +9,23 @@ object ApplicationRowMapper {
     get[Long]("id") ~
       get[String]("name") ~
       get[String]("version") ~
-      get[Long]("user_id") map {
+      get[Long]("user_id") ~
+      get[Option[String]]("public_key") ~
+      get[Option[String]]("private_key")map {
       case
         id ~
           name ~
           version ~
-          userId
+          userId ~
+          publicKey ~
+          privateKey
       =>
         Application.Full(
           id,
           name,
           version,
-          userId
+          publicKey,
+          privateKey
         )
     }
   }

@@ -8,7 +8,7 @@ import play.api.db.DB
 import com.als.shared.DataSource
 import com.als.shared.utils.date.DateUtils
 
-class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao{
+class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao {
 
   import LicenceDaoImpl._
 
@@ -17,12 +17,12 @@ class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao{
       implicit connection =>
 
         val generatedId: Option[Long] = INSERT_LICENCE_QUERY.on(
-          "serial_id"     -> item.serialNumberId,
-          "created_on"    -> DateUtils.jodaDateTimeToJavaDate(item.createdOn),
-          "active"        -> true,
-          "licence_hash"  -> item.licenceHash,
-          "public_key"    -> item.keys.publicKey,
-          "private_key"   -> item.keys.privateKey
+          "serial_id" -> item.serialNumberId,
+          "created_on" -> DateUtils.jodaDateTimeToJavaDate(item.createdOn),
+          "active" -> true,
+          "licence_hash" -> item.licenceHash,
+          "public_key" -> item.keys.publicKey,
+          "private_key" -> item.keys.privateKey
         ).executeInsert()
 
         generatedId.get
@@ -40,6 +40,12 @@ class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao{
   def findById(id: Long): Option[Licence.Full] = {
     DB.withConnection(dataSource.getName) { implicit connection =>
       FIND_BY_ID_QUERY.on("wantedValue" -> id).as[Option[Licence.Full]](LicenceRowMapper.full.singleOpt)
+    }
+  }
+
+  def findByApplicationId(id: Long): Seq[Licence.Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_APPLICATION_ID_QUERY.on("wantedValue" -> id).as[Seq[Licence.Full]](LicenceRowMapper.full *)
     }
   }
 }
@@ -71,14 +77,15 @@ object LicenceDaoImpl {
   val SELECT_FROM_LICENCES =
     """
       | SELECT
-      |   users.* ,
-      |   org.parent_id AS parent_organization_node_id
-      | FROM users
-      | JOIN organisation_structure_nodes AS org ON org.id=users.organisation_structure_node_id
+      |   *
+      | FROM licenses
+      | JOIN serials AS ser ON ser.id = licenses.serial_id
+      | JOIN applications AS app ON app.id = ser.application_id
       | """.
       stripMargin
 
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
-  val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + " WHERE users.id={wantedValue}")
+  val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + " WHERE licenses.id={wantedValue}")
+  val FIND_BY_APPLICATION_ID_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + " WHERE app.id={wantedValue}")
 }

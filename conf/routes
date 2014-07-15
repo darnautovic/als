@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                        controllers.api.web.DashboardController.showUserDashboard
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file           controllers.Assets.at(path="/public", file)
@@ -16,3 +16,12 @@ GET     /user/logout      controllers.api.web.user.authentication.Authentication
 # User
 GET  /user/create          controllers.api.web.user.UserController.createPage
 POST /user/create          controllers.api.web.user.UserController.create
+
+# Dashboard
+GET  /dashboard            controllers.api.web.DashboardController.showUserDashboard
+
+# Application
+GET  /application/create    controllers.api.web.application.ApplicationController.createPage
+POST /application/create    controllers.api.web.application.ApplicationController.create
+GET  /application           controllers.api.web.application.ApplicationController.listPage
+GET  /application/:id       controllers.api.web.application.ApplicationController.applicationPage(id :Long)

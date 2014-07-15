@@ -31,7 +31,7 @@ object AuthenticationController extends AlsController
           val session = authenticationService.login(
             LoginCredentials(credentials.username, credentials.password)
           )
-          Redirect(controllers.routes.Application.index()).withCookies(
+          Redirect(controllers.api.web.routes.DashboardController.showUserDashboard).withCookies(
             Cookie(SessionToken.ALS.getTokenName, session.sessionId)
           )
         }

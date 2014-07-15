@@ -110,10 +110,8 @@ class UserDaoImpl(val dataSource: DataSource) extends UserDao {
   val SELECT_FROM_USERS =
     """
       | SELECT
-      |   users.* ,
-      |   org.parent_id AS parent_organization_node_id
+      |   *
       | FROM users
-      | JOIN organisation_structure_nodes AS org ON org.id=users.organisation_structure_node_id
       | """.
       stripMargin
 

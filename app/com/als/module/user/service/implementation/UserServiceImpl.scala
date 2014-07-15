@@ -43,14 +43,14 @@ class UserServiceImpl(userDao :UserDao) extends UserService  {
 
   def hasCredentials(credentials: LoginCredentials): Boolean =
   {
-    val credentialsWithHashedPassword = credentials.copy(password = HashUtils.sha1(credentials.password))
+    val credentialsWithHashedPassword = credentials.copy(password = credentials.password)
 
     userDao.findByCredentials(credentialsWithHashedPassword).isDefined
   }
 
   def getByCredentials(credentials: LoginCredentials) : User.Full =
   {
-    val credentialsWithHashedPassword = credentials.copy(password = HashUtils.sha1(credentials.password))
+    val credentialsWithHashedPassword = credentials.copy(password = (credentials.password))
 
     userDao.findByCredentials(credentialsWithHashedPassword)
       .getOrElse(throw new IllegalStateException("User " + credentials.username + " with given credentials is not found"))

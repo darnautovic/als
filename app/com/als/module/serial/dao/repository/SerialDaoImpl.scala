@@ -1,5 +1,6 @@
 package com.als.module.serial.dao.repository
 
+import com.als.domain.Serial.Full
 import play.api.Play.current
 import anorm._
 import com.als.domain.Serial
@@ -18,9 +19,9 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
       implicit connection =>
 
         val generatedId: Option[Long] = INSERT_SERIAL_QUERY.on(
-          "serial_id"     -> item.applicationId,
-          "created_on"    -> item.serialNumber,
-          "active"        -> DateUtils.jodaDateTimeToJavaDate(item.createdOn)
+          "serial_id" -> item.applicationId,
+          "created_on" -> item.serialNumber,
+          "active" -> DateUtils.jodaDateTimeToJavaDate(item.createdOn)
         ).executeInsert()
 
         generatedId.get
@@ -30,6 +31,12 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
   def findById(id: Long): Option[Serial.Full] = {
     DB.withConnection(dataSource.getName) { implicit connection =>
       FIND_BY_ID_QUERY.on("wantedValue" -> id).as[Option[Serial.Full]](SerialRowMapper.full.singleOpt)
+    }
+  }
+
+  override def findByApplicationId(id: Long): Seq[Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_APPLICATION_ID_QUERY.on("wantedValue" -> id).as[Seq[Serial.Full]](SerialRowMapper.full *)
     }
   }
 }
@@ -49,14 +56,14 @@ object SerialDaoImpl {
    val SELECT_FROM_SERIALS =
     """
       | SELECT
-      |   users.* ,
-      |   org.parent_id AS parent_organization_node_id
-      | FROM users
-      | JOIN organisation_structure_nodes AS org ON org.id=users.organisation_structure_node_id
+      |   *
+      | FROM serials
+      | JOIN applications AS app ON app.id = serials.id
       | """.
       stripMargin
 
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
-  val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE users.id={wantedValue}")
+  val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE serials.id={wantedValue}")
+  val FIND_BY_APPLICATION_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE app.id={wantedValue}")
 }
