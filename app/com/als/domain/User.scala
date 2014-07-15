@@ -14,11 +14,11 @@ object User
 
    case class Create
   (
-    username  : String,
-    password  : String,
     firstName : String,
     lastName  : String,
-    email     : String
+    email     : String,
+    username  : String,
+    password  : String
   )
 
   case class Edit

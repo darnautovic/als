@@ -6,6 +6,8 @@ import com.als.domain.authentication.LoginCredentials
 import com.als.module.registry.ServiceRegistry
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.validation.Constraints._
+
 
 case class LoginModel(form: Form[Login])
 

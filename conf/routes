@@ -12,3 +12,7 @@ GET     /assets/*file           controllers.Assets.at(path="/public", file)
 GET     /user/login       controllers.api.web.user.authentication.AuthenticationController.showLoginPage
 POST    /user/login       controllers.api.web.user.authentication.AuthenticationController.login
 GET     /user/logout      controllers.api.web.user.authentication.AuthenticationController.logout
+
+# User
+GET  /user/create          controllers.api.web.user.UserController.createPage
+POST /user/create          controllers.api.web.user.UserController.create

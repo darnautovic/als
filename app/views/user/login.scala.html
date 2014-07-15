@@ -8,7 +8,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login - Bootstrap Admin Template</title>
+    <title>Application Licence Service</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-  @helper.form(action = controllers.api.web.user.authentication.routes.AuthenticationController.login, 'class -> "form-horizontal") {
+  @helper.form(action = controllers.api.web.user.authentication.routes.AuthenticationController.login) {
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
@@ -59,7 +59,7 @@
     <div class="account-container">
         <div class="content clearfix">
             <form action="#" method="post">
-                <h1>ALS Service Login</h1>
+                <h1>Application Licence Service</h1>
                 <div class="login-fields">
                     <p>Please provide your details</p>
                     <div class="field">
@@ -93,7 +93,7 @@
         </div> <!-- /content -->
     </div> <!-- /account-container -->
     <div class="login-extra">
-        <a href="#">Create user account</a>
+        <a href="@controllers.api.web.user.routes.UserController.createPage">Create user account</a>
     </div> <!-- /login-extra -->
     <script src="/assets/javascripts/js/jquery-1.7.2.min.js"></script>
     <script src="/assets/javascripts/js/bootstrap.js"></script>

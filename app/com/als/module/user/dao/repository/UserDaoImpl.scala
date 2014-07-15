@@ -89,11 +89,9 @@ class UserDaoImpl(val dataSource: DataSource) extends UserDao {
     val INSERT_USER_QUERY: SqlQuery = SQL(
       """
       | INSERT INTO users
-      |   (external_id,       username,   password,   first_name,  middle_name,  last_name,  email,   phone,   mobile,
-      |   skype,   notes,   is_credit_officer, change_password_on_next_login, organisation_structure_node_id, top_visible_node_id)
+      |   (username,   password,   first_name,  last_name,  email)
       | VALUES
-      |   ({externalId}, {username}, {password}, {firstName}, {middleName}, {lastName}, {email}, {phone}, {mobile},
-      |   {skype}, {notes}, {isCreditOfficer}, {changePasswordOnNextLogin},    {organisationStructureNodeId}, {topVisibleNodeId})
+      |   ({username}, {password}, {firstName}, {lastName}, {email})
     """.
         stripMargin)
 

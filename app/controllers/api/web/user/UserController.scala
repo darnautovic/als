@@ -1,49 +1,41 @@
-//package controllers.api.web.user
-//
-//import com.als.module.registry.ServiceRegistry
-//import play.api.Play.current
-//import play.api.mvc.Action
-//
-//object UserController {
-//
-//  private val authenticationService = ServiceRegistry.webAuthenticationService
-//
-//
-//  def showLoginPage = Action
-//  {
-//    Ok(html.user.authentication.login(LoginModel(LoginForm.form, organisationName)))
-//  }
-//
-//  def login = Action
-//  {
-//    implicit request =>
-//
-//      val form = LoginForm.form.bindFromRequest
-//
-//      form.fold(
-//        formWithErrors  =>
-//        {
-//          BadRequest(html.user.authentication.login(LoginModel(formWithErrors,organisationName)))
-//        },
-//        credentials     =>
-//        {
-//          val session = authenticationService.login(
-//            Credentials(credentials.username, credentials.password)
-//          )
-//
-//
-//          Redirect(controllers.dashboard.routes.DashboardController.showUserDashboard()).withCookies(
-//            Cookie(InstafinCookies.SESSION_TOKEN, session.sessionId, secure = sessionSecureFlag)
-//          )
-//        }
-//      )
-//  }
-//
-//  def logout = AuthenticatedActionWithoutForcePasswordChangeCheck
-//  {
-//    implicit requestWithSession =>
-//      authenticationService.logout(requestWithSession.session.sessionId)
-//
-//      Redirect(controllers.user.authentication.routes.AuthenticationController.showLoginPage()).discardingCookies(DiscardingCookie(InstafinCookies.SESSION_TOKEN))
-//  }
-//}
+package controllers.api.web.user
+
+import com.als.module.registry.ServiceRegistry
+import models.user.models.user.authentication.{Login, LoginForm, LoginModel}
+import models.user.{UserCreateForm, UserCreateModel}
+import play.api.Play.current
+import play.api.mvc.{Controller, Action}
+
+object UserController extends Controller  {
+
+  private val authenticationService = ServiceRegistry.webAuthenticationService
+  private val userService           = ServiceRegistry.userService
+
+  def createPage = Action
+  {
+    implicit request =>
+
+      val formWithDefaultValues =  UserCreateForm.form
+
+      Ok(views.html.user.create(UserCreateModel(formWithDefaultValues)))
+  }
+
+  def create = Action
+  {
+    implicit request =>
+      val form = UserCreateForm.form.bindFromRequest()(request)
+      val formWithDefaultValues =  LoginForm.form
+
+      form.fold(
+        formWithErrors =>
+        {
+          BadRequest(views.html.user.create(UserCreateModel(form)))
+        },
+        user =>
+        {
+          val generatedId = userService.create(user)
+
+          Ok(views.html.user.login(LoginModel(formWithDefaultValues)))
+        })
+  }
+}
