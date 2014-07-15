@@ -1,6 +1,6 @@
 package com.als.module.serial.dao.repository
 
-import com.als.domain.Serial.Full
+import com.als.domain.Serial.{Create, Full}
 import play.api.Play.current
 import anorm._
 import com.als.domain.Serial
@@ -37,6 +37,30 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
   override def findByApplicationId(id: Long): Seq[Full] = {
     DB.withConnection(dataSource.getName) { implicit connection =>
       FIND_BY_APPLICATION_ID_QUERY.on("wantedValue" -> id).as[Seq[Serial.Full]](SerialRowMapper.full *)
+    }
+  }
+
+  override def insertAll(items: Seq[Create]) = {
+
+    DB.withTransaction(dataSource.getName) {   implicit connection =>
+
+      val serialsBatchSql = SQL(
+        """
+     INSERT INTO serials (application_id,  serial_number,  created_on)
+     VALUES ({applicationId}, {serialNumber}, {createdOn})
+        """).asBatch
+
+      
+
+      items.foldLeft(serialsBatchSql)
+      {
+        (serialsBatchSql, serial) =>
+          serialsBatchSql.addBatch(
+            "applicationId"    -> serial.applicationId,
+            "serialNumber"     -> serial.serialNumber,
+            "createdOn"        -> DateUtils.jodaDateTimeToJavaDate(serial.createdOn)
+          )
+      }.execute()
     }
   }
 }

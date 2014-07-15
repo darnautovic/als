@@ -90,6 +90,9 @@
                             <div class="widget-content">
                                 <div class="widget big-stats-container">
                                     <div class="widget-content">
+                                        @helper.form(action = controllers.api.web.serial.routes.SerialController.generateSerials(model.application.get.id)){
+                                        <h6 class="bigstats"><button type="submit" class="btn btn-danger">Generate 10 serial numbers</button></h6>
+                                        }
                                         @if(model.serials.isEmpty){
                                         <div id="big_stats" class="cf">
                                             <div class="stat"> <i class="icon-list-alt"></i> <span class="value">No generated serials</span> </div>
@@ -134,6 +137,7 @@
                                 <div class="widget-content">
                                     <div class="widget big-stats-container">
                                         <div class="widget-content">
+                                            @if(!model.serials.isEmpty){<h6 class="bigstats"><button onclick="window.location.href= ''" class="btn btn-danger">Register application</button></h6>}
                                             @if(model.licenses.isEmpty){
                                             <div id="big_stats" class="cf">
                                                 <div class="stat"> <i class="icon-list-alt"></i> <span class="value">No issued licences</span> </div>

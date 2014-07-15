@@ -25,3 +25,6 @@ GET  /application/create    controllers.api.web.application.ApplicationControlle
 POST /application/create    controllers.api.web.application.ApplicationController.create
 GET  /application           controllers.api.web.application.ApplicationController.listPage
 GET  /application/:id       controllers.api.web.application.ApplicationController.applicationPage(id :Long)
+
+#Serials
+POST /serial/create    controllers.api.web.serial.SerialController.generateSerials(id :Long)

@@ -90,8 +90,8 @@
                             <div class="widget-content">
                                 <div class="widget big-stats-container">
                                     <div class="widget-content">
-                                      @if(model.applications.isEmpty){
                                         <h6 class="bigstats"><button onclick="window.location.href= '@controllers.api.web.application.routes.ApplicationController.createPage'" class="btn btn-danger" >Create application</button></h6>
+                                        @if(model.applications.isEmpty){
                                         <div id="big_stats" class="cf">
                                             <div class="stat"> <i class="icon-list-alt"></i> <span class="value">Please create application</span> </div>
                                         </div>
