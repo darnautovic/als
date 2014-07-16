@@ -10,7 +10,7 @@ import com.als.shared.utils.date.DateUtils
 
 object SerialRowMapper {
   val full = {
-    get[Long]("id") ~
+    get[Long]("serials.id") ~
       get[Long]("application_id") ~
       get[String]("serial_number") ~
       get[Date]("created_on") map {
