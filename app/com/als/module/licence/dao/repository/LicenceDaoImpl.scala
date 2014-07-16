@@ -18,11 +18,12 @@ class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao {
 
         val generatedId: Option[Long] = INSERT_LICENCE_QUERY.on(
           "serial_id" -> item.serialNumberId,
+          "client_id" -> item.clientId,
           "created_on" -> DateUtils.jodaDateTimeToJavaDate(item.createdOn),
           "active" -> true,
           "licence_hash" -> item.licenceHash,
-          "public_key" -> item.keys.publicKey,
-          "private_key" -> item.keys.privateKey
+          "signed_hash" -> item.licenceHash
+
         ).executeInsert()
 
         generatedId.get
@@ -53,24 +54,16 @@ class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao {
 object LicenceDaoImpl {
   val INSERT_LICENCE_QUERY: SqlQuery = SQL(
     """
-      | INSERT INTO users
-      |   (external_id,       username,   password,   first_name,  middle_name,  last_name,  email,   phone,   mobile,
-      |   skype,   notes,   is_credit_officer, change_password_on_next_login, organisation_structure_node_id, top_visible_node_id)
+      | INSERT INTO licenses
+      |   (serial_id, client_id, created_on,  active,   licence_hash, signed_hash)
       | VALUES
-      |   ({externalId}, {username}, {password}, {firstName}, {middleName}, {lastName}, {email}, {phone}, {mobile},
-      |   {skype}, {notes}, {isCreditOfficer}, {changePasswordOnNextLogin},    {organisationStructureNodeId}, {topVisibleNodeId})
+      |   ({serial_id},{client_id},{created_on}, {active}, {licence_hash}, {signed_hash})
     """.
       stripMargin)
 
   val UPDATE_LICENCE_QUERY: SqlQuery = SQL(
     """
-      | UPDATE users
-      | SET
-      |   password={password},   first_name={firstName},  middle_name= {middleName},
-      |   last_name={lastName},  email={email},   phone={phone},   mobile={mobile},   skype={skype},   notes={notes},
-      |   is_credit_officer={isCreditOfficer}, change_password_on_next_login={changePasswordOnNextLogin}, top_visible_node_id={topVisibleNodeId}
-      | WHERE
-      |   id={id}
+
     """.
       stripMargin)
 

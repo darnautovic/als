@@ -1,5 +1,6 @@
 package com.als.module.application.dao.repository
 
+import com.als.domain.Application.Full
 import play.api.Play.current
 import com.als.domain.Application
 import com.als.module.application.dao.ApplicationDao
@@ -12,17 +13,17 @@ class   ApplicationDaoImpl(val dataSource: DataSource) extends ApplicationDao {
 
   import ApplicationDaoImpl._
 
-  def insert(userId :Long, item: Application.Create): Long = {
+  def insert(userId: Long, item: Application.Create): Long = {
     DB.withTransaction(dataSource.getName) {
       implicit connection =>
 
         val keysId: Option[Long] = insertKeys(item).executeInsert()
 
         val generatedId: Option[Long] = INSERT_APPLICATION_QUERY.on(
-          "userId"     -> userId,
-          "keyId"     -> keysId.get,
-          "name"        -> item.name,
-          "version"     -> item.version
+          "userId" -> userId,
+          "keyId" -> keysId.get,
+          "name" -> item.name,
+          "version" -> item.version
         ).executeInsert()
 
         generatedId.get
@@ -45,7 +46,13 @@ class   ApplicationDaoImpl(val dataSource: DataSource) extends ApplicationDao {
 
   def findAllByUserId(userId: Long): Seq[Application.Full] = {
     DB.withConnection(dataSource.getName) { implicit connection =>
-      FIND_BY_USER_ID_QUERY.on("wantedValue" -> userId).as[Seq[Application.Full]](ApplicationRowMapper.full*)
+      FIND_BY_USER_ID_QUERY.on("wantedValue" -> userId).as[Seq[Application.Full]](ApplicationRowMapper.full *)
+    }
+  }
+
+  def findBySerial(id: String): Option[Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_SERIAL_ID_QUERY.on("wantedValue" -> id).as[Option[Application.Full]](ApplicationRowMapper.full.singleOpt)
     }
   }
 }
@@ -72,6 +79,15 @@ object ApplicationDaoImpl {
     """.
       stripMargin)
 
+  val SELECT_FROM_APPLICATIONS3 =
+    """
+      | SELECT * FROM applications
+      | JOIN users as usr  ON usr.id = applications.user_id
+      | JOIN keys  as key  ON key.id = applications.key_id
+      | JOIN serials as ser  ON ser.application_id = applications.id
+      | """.
+      stripMargin
+
   val SELECT_FROM_APPLICATIONS =
     """
       | SELECT * FROM applications
@@ -83,6 +99,7 @@ object ApplicationDaoImpl {
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
   val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + " WHERE applications.id={wantedValue}")
+  val FIND_BY_SERIAL_ID_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS3 + " WHERE ser.serial_number={wantedValue}")
   val FIND_BY_USER_ID_QUERY: SqlQuery = SQL(SELECT_FROM_APPLICATIONS + " WHERE usr.id = {wantedValue}")
 
   def insertKeys(item :Application.Create) =

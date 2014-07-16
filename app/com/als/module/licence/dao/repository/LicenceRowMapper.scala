@@ -3,7 +3,6 @@ package com.als.module.licence.dao.repository
 import java.util.Date
 
 import play.api.Play.current
-import com.als.domain.Licence.Keys
 import com.als.domain.Licence
 import anorm.SqlParser._
 import anorm.~
@@ -16,24 +15,22 @@ object LicenceRowMapper {
       get[Date]("created_on") ~
       get[Boolean]("active") ~
       get[String]("licence_hash") ~
-      get[String]("public_key") ~
-      get[String]("private_key") map {
+      get[String]("signed_hash") map {
       case
         id ~
           serialNumberId ~
           createdOn ~
           active ~
           licenceHash ~
-          publicKey ~
-          privateKey
+          signedHash
       =>
         Licence.Full(
           id,
           serialNumberId,
           DateUtils.javaDateToJodaDateTime(createdOn),
           active,
-          Keys(publicKey, privateKey),
-          licenceHash
+          licenceHash,
+          signedHash
         )
     }
   }

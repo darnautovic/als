@@ -9,9 +9,20 @@ import com.als.module.serial.service.SerialService
 import com.als.shared.utils.date.DateUtils
 
 class SerialServiceImpl(serialDao :SerialDao) extends SerialService {
-  def getById(id: Long): Full = {
+
+  def getById(id: Long): Option[Full] = {
     serialDao.findById(id)
   }
+
+  def getIdBySerial(serial: String): Option[Full] = {
+    serialDao.findBySerial(serial)
+  }
+
+
+  def isCreated(serial :String) :Boolean = {
+    serialDao.findBySerial(serial).isDefined
+  }
+
   def getAllByApplicationId(id: Long): Seq[Full]  = {
      serialDao.findByApplicationId(id)
    }

@@ -42,7 +42,7 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
 
   override def insertAll(items: Seq[Create]) = {
 
-    DB.withTransaction(dataSource.getName) {   implicit connection =>
+    DB.withTransaction(dataSource.getName) { implicit connection =>
 
       val serialsBatchSql = SQL(
         """
@@ -50,15 +50,20 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
      VALUES ({applicationId}, {serialNumber}, {createdOn})
         """).asBatch
 
-            items.foldLeft(serialsBatchSql)
-      {
+      items.foldLeft(serialsBatchSql) {
         (serialsBatchSql, serial) =>
           serialsBatchSql.addBatch(
-            "applicationId"    -> serial.applicationId,
-            "serialNumber"     -> serial.serialNumber,
-            "createdOn"        -> DateUtils.jodaDateTimeToJavaDate(serial.createdOn)
+            "applicationId" -> serial.applicationId,
+            "serialNumber" -> serial.serialNumber,
+            "createdOn" -> DateUtils.jodaDateTimeToJavaDate(serial.createdOn)
           )
       }.execute()
+    }
+  }
+
+  def findBySerial(serial: String): Option[Serial.Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_SERIAL_QUERY.on("wantedValue" -> serial).as[Option[Serial.Full]](SerialRowMapper.full.singleOpt)
     }
   }
 }
@@ -75,12 +80,13 @@ object SerialDaoImpl {
       | SELECT
       |   *
       | FROM serials
-      | JOIN applications AS app ON app.id = serials.id
+      | JOIN applications AS app ON app.id = serials.application_id
       | """.
       stripMargin
 
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
   val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE serials.id={wantedValue}")
+  val FIND_BY_SERIAL_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE serials.serial_number={wantedValue}")
   val FIND_BY_APPLICATION_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE app.id={wantedValue}")
 }

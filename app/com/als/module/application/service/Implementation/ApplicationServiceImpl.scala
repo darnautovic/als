@@ -29,4 +29,8 @@ class ApplicationServiceImpl (applicationDao : ApplicationDao) extends Applicati
    def getAllByUserId(implicit userInformation: Long): Seq[Full] = {
      applicationDao.findAllByUserId(userInformation)
    }
+
+  override def getBySerial(id: String): Option[Full] = {
+    applicationDao.findBySerial(id)
+  }
 }

@@ -12,6 +12,8 @@ import com.als.module.authentication.web.service.WebAuthenticationService
 import com.als.module.authentication.web.service.implementation.WebAuthenticationServiceImpl
 import com.als.module.client.dao.ClientDao
 import com.als.module.client.dao.repository.ClientDaoImpl
+import com.als.module.client.service.ClientService
+import com.als.module.client.service.implementation.ClientServiceImpl
 import com.als.module.licence.dao.LicenceDao
 import com.als.module.licence.dao.repository.LicenceDaoImpl
 import com.als.module.licence.service.LicenceService
@@ -39,5 +41,6 @@ object ServiceRegistry {
   val webAuthenticationService :WebAuthenticationService = new WebAuthenticationServiceImpl(sessionService, userService)
   val applicationService       :ApplicationService       = new ApplicationServiceImpl(applicationDao)
   val serialService            :SerialService            = new SerialServiceImpl(serialDao)
-  val licenceService           :LicenceService           = new LicenceServiceImpl(licenceDao)
+  val licenceService           :LicenceService           = new LicenceServiceImpl(serialService, applicationService, licenceDao)
+  val clientService           :ClientService             = new  ClientServiceImpl(clientDao)
 }

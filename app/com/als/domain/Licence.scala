@@ -10,17 +10,18 @@ object Licence
     serialNumberId :Long,
     createdOn      :DateTime,
     active         :Boolean,
-    keys           :Keys,
-    licenceHash    :String
+    licenceHash    :String,
+    signedHash     :String
   )
 
   case class Create
   (
     serialNumberId :Long,
+    clientId       :Long,
     createdOn      :DateTime,
     active         :Boolean,
-    keys           :Keys,
-    licenceHash    :String
+    licenceHash    :String,
+    signedHash     :String
   )
 
   case class Edit
@@ -29,14 +30,9 @@ object Licence
     serialNumberId :Long,
     createdOn      :DateTime,
     active         :Boolean,
-    keys           :Keys,
     licenceHash    :String
   )
 
-  case class Keys
-  (
-    publicKey   :String,
-    privateKey  :String
-  )
+
 }
 

@@ -10,17 +10,16 @@ import anorm._
 
 class ClientDaoImpl(val dataSource: DataSource) extends ClientDao {
 
-  import UserDaoImpl._
+  import ClientDaoImpl._
 
   def insert(item: Client.Create): Long = {
     DB.withTransaction(dataSource.getName) {
       implicit connection =>
 
         val generatedId: Option[Long] = INSERT_USER_QUERY.on(
-          "name"     -> item.name,
-          "lastName" -> item.lastName,
-          "company"->   item.company,
-          "lastName" -> item.lastName
+          "first_name"     -> item.name,
+          "last_name" -> item.lastName,
+          "company"->   item.company.getOrElse("")
         ).executeInsert()
 
         generatedId.get
@@ -51,15 +50,13 @@ class ClientDaoImpl(val dataSource: DataSource) extends ClientDao {
   }
 }
 
-object UserDaoImpl {
+object ClientDaoImpl {
   val INSERT_USER_QUERY: SqlQuery = SQL(
     """
-      | INSERT INTO users
-      |   (external_id,       username,   password,   first_name,  middle_name,  last_name,  email,   phone,   mobile,
-      |   skype,   notes,   is_credit_officer, change_password_on_next_login, organisation_structure_node_id, top_visible_node_id)
+      | INSERT INTO clients
+      |   ( first_name, company, last_name)
       | VALUES
-      |   ({externalId}, {username}, {password}, {firstName}, {middleName}, {lastName}, {email}, {phone}, {mobile},
-      |   {skype}, {notes}, {isCreditOfficer}, {changePasswordOnNextLogin},    {organisationStructureNodeId}, {topVisibleNodeId})
+      |   ({first_name}, {company}, {last_name})
     """.
       stripMargin)
 

@@ -11,6 +11,12 @@ CREATE TABLE users (
    email                VARCHAR(64) NOT NULL
 );
 
+CREATE TABLE clients (
+   id                   SERIAL PRIMARY KEY,
+   first_name           VARCHAR(64) NOT NULL,
+   last_name            VARCHAR(64) NOT NULL,
+   company              VARCHAR(64) NOT NULL
+ );
 
 CREATE TABLE keys (
    id                   SERIAL PRIMARY KEY,
@@ -40,24 +46,16 @@ CREATE TABLE serials (
 CREATE TABLE licenses (
    id                    SERIAL PRIMARY KEY,
    serial_id             INTEGER NOT NULL,
+   client_id             INTEGER NOT NULL,
    created_on            VARCHAR(64) NOT NULL,
-   active                VARCHAR(64) NOT NULL,
-   licence_hash          VARCHAR(64) NOT NULL,
-   signed_hash           VARCHAR(64) NOT NULL,
-   foreign key (serial_id) references serials (id)
+   active                BOOLEAN NOT NULL,
+   licence_hash          VARCHAR(512) NOT NULL,
+   signed_hash           VARCHAR(512) NOT NULL,
+   foreign key (serial_id) references serials (id),
+   foreign key (client_id) references clients(id)
 );
 
-CREATE TABLE clients (
-   id                   SERIAL PRIMARY KEY,
-   serial_id            INTEGER NOT NULL,
-   application_id       INTEGER NOT NULL,
-   username             VARCHAR(10) NOT NULL,
-   password             VARCHAR(64) NOT NULL,
-   first_name           VARCHAR(64) NOT NULL,
-   last_name            VARCHAR(64) NOT NULL,
-   email                VARCHAR(64) NOT NULL,
-   foreign key (application_id) references applications (id)
-);
+
 
 CREATE TABLE sessions
 (

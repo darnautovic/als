@@ -28,3 +28,7 @@ GET  /application/:id       controllers.api.web.application.ApplicationControlle
 
 #Serials
 POST /serial/create    controllers.api.web.serial.SerialController.generateSerial(id :Long)
+
+#licence
+POST /api/register  controllers.api.activation.ActivationController.registerClient
+GET /api/download  controllers.api.download.DownloadController.download(id:Long)
