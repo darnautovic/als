@@ -41,4 +41,8 @@ class SerialServiceImpl(serialDao :SerialDao) extends SerialService {
      serialDao.insert(generatedSerial)
    }
 
+   def getAllByUserId(id: Long): Seq[Full] =
+   {
+     serialDao.findAllByUserId(id :Long)
+   }
 }

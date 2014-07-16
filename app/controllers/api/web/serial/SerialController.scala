@@ -3,6 +3,8 @@ package controllers.api.web.serial
 import com.als.module.registry.ServiceRegistry
 import controllers.api.web.shared.AlsController
 import models.application.ApplicationPageModel
+import models.licence.LicenceListModel
+import models.serial.SerialListModel
 
 
 object SerialController extends AlsController{
@@ -37,4 +39,12 @@ object SerialController extends AlsController{
       Ok(views.html.application.applicationPage(ApplicationPageModel(application, serialList, licenseList)))
   }
 
+  def listSerials = AuthenticatedAction
+  {
+    implicit requestWithSession =>
+
+      val serialList     = serialService.getAllByUserId(requestWithSession.session.user.id)
+
+      Ok(views.html.serial.list(SerialListModel(serialList)))
+  }
 }

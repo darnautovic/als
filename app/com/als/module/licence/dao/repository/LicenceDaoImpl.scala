@@ -1,5 +1,6 @@
 package com.als.module.licence.dao.repository
 
+import com.als.domain.Licence.Full
 import play.api.Play.current
 import anorm._
 import com.als.domain.Licence
@@ -49,7 +50,12 @@ class LicenceDaoImpl(val dataSource: DataSource) extends LicenceDao {
       FIND_BY_APPLICATION_ID_QUERY.on("wantedValue" -> id).as[Seq[Licence.Full]](LicenceRowMapper.full *)
     }
   }
-}
+
+  override def findAllByUserId(id: Long): Seq[Licence.Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_USER_ID_QUERY.on("wantedValue" -> id).as[Seq[Licence.Full]](LicenceRowMapper.full *)
+    }
+  }
 
 object LicenceDaoImpl {
   val INSERT_LICENCE_QUERY: SqlQuery = SQL(
@@ -80,5 +86,7 @@ object LicenceDaoImpl {
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")
 
   val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + " WHERE licenses.id={wantedValue}")
+  val FIND_BY_USER_ID_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + " WHERE app.user_id={wantedValue}")
   val FIND_BY_APPLICATION_ID_QUERY: SqlQuery = SQL(SELECT_FROM_LICENCES + " WHERE app.id={wantedValue}")
 }
+ }

@@ -49,8 +49,8 @@
                 <ul class="mainnav">
                     <li class="active"><a href="index.html"><i class="icon-dashboard"></i><span>Dashboard</span> </a> </li>
                     <li><a href="@controllers.api.web.application.routes.ApplicationController.listPage"><i class="icon-list-alt"></i><span>Applications</span> </a> </li>
-                    <li><a href="guidely.html"><i class="icon-key"></i><span>Serials</span> </a></li>
-                    <li><a href="charts.html"><i class="icon-lock"></i><span>Licences</span> </a> </li>
+                    <li><a href="@controllers.api.web.serial.routes.SerialController.listSerials"><i class="icon-key"></i><span>Serials</span> </a></li>
+                    <li><a href="@controllers.api.web.licence.routes.LicenceController.listLicences"><i class="icon-lock"></i><span>Licences</span> </a> </li>
                 </ul>
             </div>
             <!-- /container -->
@@ -71,8 +71,8 @@
                             <div class="widget-content">
                                 <div class="shortcuts">
                                     <a href="@controllers.api.web.application.routes.ApplicationController.listPage" class="shortcut"><i class="shortcut-icon icon-list-alt"></i><span class="shortcut-label">Applications</span> </a>
-                                    <a href="javascript:;" class="shortcut"><i class="shortcut-icon  icon-key"></i> <span class="shortcut-label">Serial numbers</span> </a>
-                                    <a href="javascript:;" class="shortcut"> <i class="shortcut-icon icon-lock"></i><span class="shortcut-label">Licences</span> </a>
+                                    <a href="@controllers.api.web.serial.routes.SerialController.listSerials" class="shortcut"><i class="shortcut-icon  icon-key"></i> <span class="shortcut-label">Serial numbers</span> </a>
+                                    <a href="@controllers.api.web.licence.routes.LicenceController.listLicences" class="shortcut"> <i class="shortcut-icon icon-lock"></i><span class="shortcut-label">Licences</span> </a>
                                 </div>
                                 <!-- /shortcuts -->
                             </div>

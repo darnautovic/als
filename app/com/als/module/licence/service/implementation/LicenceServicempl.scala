@@ -35,4 +35,9 @@ class LicenceServiceImpl(serialService :SerialService, applicationService :Appli
    def getById(id: Long): Option[Full] = {
     licenceDao.findById(id)
   }
+
+  def getAllByUserId(id: Long): Seq[Full] =
+  {
+    licenceDao.findAllByUserId(id)
+  }
 }

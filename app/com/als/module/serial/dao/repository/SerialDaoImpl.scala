@@ -66,6 +66,12 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
       FIND_BY_SERIAL_QUERY.on("wantedValue" -> serial).as[Option[Serial.Full]](SerialRowMapper.full.singleOpt)
     }
   }
+
+  def findAllByUserId(id: Long): Seq[Full] = {
+    DB.withConnection(dataSource.getName) { implicit connection =>
+      FIND_BY_USER_QUERY.on("wantedValue" -> id).as[Seq[Serial.Full]](SerialRowMapper.full*)
+    }
+  }
 }
 
 object SerialDaoImpl {
@@ -88,5 +94,6 @@ object SerialDaoImpl {
 
   val FIND_BY_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE serials.id={wantedValue}")
   val FIND_BY_SERIAL_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE serials.serial_number={wantedValue}")
+  val FIND_BY_USER_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE app.user_id={wantedValue}")
   val FIND_BY_APPLICATION_ID_QUERY: SqlQuery = SQL(SELECT_FROM_SERIALS + " WHERE app.id={wantedValue}")
 }
