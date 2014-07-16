@@ -19,9 +19,9 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
       implicit connection =>
 
         val generatedId: Option[Long] = INSERT_SERIAL_QUERY.on(
-          "serial_id" -> item.applicationId,
-          "created_on" -> item.serialNumber,
-          "active" -> DateUtils.jodaDateTimeToJavaDate(item.createdOn)
+          "serial_number" -> item.serialNumber,
+          "created_on" -> DateUtils.jodaDateTimeToJavaDate(item.createdOn),
+          "application_id" -> item.applicationId
         ).executeInsert()
 
         generatedId.get
@@ -50,9 +50,7 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
      VALUES ({applicationId}, {serialNumber}, {createdOn})
         """).asBatch
 
-      
-
-      items.foldLeft(serialsBatchSql)
+            items.foldLeft(serialsBatchSql)
       {
         (serialsBatchSql, serial) =>
           serialsBatchSql.addBatch(
@@ -68,14 +66,9 @@ class SerialDaoImpl(val dataSource: DataSource) extends SerialDao {
 object SerialDaoImpl {
   val INSERT_SERIAL_QUERY: SqlQuery = SQL(
     """
-      | INSERT INTO users
-      |   (external_id,       username,   password,   first_name,  middle_name,  last_name,  email,   phone,   mobile,
-      |   skype,   notes,   is_credit_officer, change_password_on_next_login, organisation_structure_node_id, top_visible_node_id)
-      | VALUES
-      |   ({externalId}, {username}, {password}, {firstName}, {middleName}, {lastName}, {email}, {phone}, {mobile},
-      |   {skype}, {notes}, {isCreditOfficer}, {changePasswordOnNextLogin},    {organisationStructureNodeId}, {topVisibleNodeId})
-    """.
-      stripMargin)
+     INSERT INTO serials (application_id,  serial_number,  created_on)
+     VALUES ({application_id}, {serial_number}, {created_on})
+    """)
 
    val SELECT_FROM_SERIALS =
     """

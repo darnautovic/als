@@ -24,4 +24,17 @@ object SerialController extends AlsController{
       Ok(views.html.application.applicationPage(ApplicationPageModel(application, serialList, licenseList)))
   }
 
+  def generateSerial(id :Long) = AuthenticatedAction
+  {
+    implicit requestWithSession =>
+
+      serialService.generateSerial(id)
+
+      val application     = applicationService.getById(id)
+      val serialList      = serialService.getAllByApplicationId(id)
+      val licenseList     = licenseService.getAllByApplicationId(id)
+
+      Ok(views.html.application.applicationPage(ApplicationPageModel(application, serialList, licenseList)))
+  }
+
 }

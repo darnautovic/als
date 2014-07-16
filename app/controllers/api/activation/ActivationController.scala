@@ -1,5 +1,8 @@
 package controllers.api.activation
 
-object ActivationController {
+import play.mvc.Controller
+
+object ActivationController extends Controller{
+
 
 }

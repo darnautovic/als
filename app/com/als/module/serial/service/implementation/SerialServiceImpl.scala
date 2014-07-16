@@ -9,9 +9,12 @@ import com.als.module.serial.service.SerialService
 import com.als.shared.utils.date.DateUtils
 
 class SerialServiceImpl(serialDao :SerialDao) extends SerialService {
-   def getAllByApplicationId(id: Long): Seq[Full]  = {
-     serialDao.findByApplicationId(id)
+  def getById(id: Long): Full = {
+    serialDao.findById(id)
   }
+  def getAllByApplicationId(id: Long): Seq[Full]  = {
+     serialDao.findByApplicationId(id)
+   }
 
   def generateSerials(applicationId:Long, numberOfLicenses: Long)  = {
 
@@ -19,4 +22,12 @@ class SerialServiceImpl(serialDao :SerialDao) extends SerialService {
 
     serialDao.insertAll(generatedSerials)
   }
+
+  def generateSerial(applicationId: Long): Unit = {
+
+     val generatedSerial: Serial.Create = Serial.Create(applicationId, UUID.randomUUID().toString, DateUtils.nowDateTimeUTC())
+
+     serialDao.insert(generatedSerial)
+   }
+
 }

@@ -33,7 +33,7 @@ CREATE TABLE serials (
    id                   SERIAL PRIMARY KEY,
    application_id       INTEGER NOT NULL,
    serial_number        VARCHAR(64) NOT NULL,
-   created_on           VARCHAR(64) NOT NULL,
+   created_on           DATE NOT NULL,
    foreign key (application_id) references applications (id)
 );
 
@@ -43,6 +43,7 @@ CREATE TABLE licenses (
    created_on            VARCHAR(64) NOT NULL,
    active                VARCHAR(64) NOT NULL,
    licence_hash          VARCHAR(64) NOT NULL,
+   signed_hash           VARCHAR(64) NOT NULL,
    foreign key (serial_id) references serials (id)
 );
 
