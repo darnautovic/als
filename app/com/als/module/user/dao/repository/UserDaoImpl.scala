@@ -98,12 +98,6 @@ class UserDaoImpl(val dataSource: DataSource) extends UserDao {
   val UPDATE_USER_QUERY: SqlQuery = SQL(
     """
       | UPDATE users
-      | SET
-      |   password={password},   first_name={firstName},  middle_name= {middleName},
-      |   last_name={lastName},  email={email},   phone={phone},   mobile={mobile},   skype={skype},   notes={notes},
-      |   is_credit_officer={isCreditOfficer}, change_password_on_next_login={changePasswordOnNextLogin}, top_visible_node_id={topVisibleNodeId}
-      | WHERE
-      |   id={id}
     """.
       stripMargin)
 
@@ -118,11 +112,6 @@ class UserDaoImpl(val dataSource: DataSource) extends UserDao {
   val CHANGE_PASSWORD_QUERY =  SQL(
     """
       | UPDATE users
-      | SET
-      |   password={password},
-      |   change_password_on_next_login={changePasswordOnNextLogin}
-      | WHERE
-      | username={username}
     """.stripMargin)
 
   val FIND_ALL_QUERY: SqlQuery = SQL(SELECT_FROM_USERS + "ORDER BY first_name ASC, last_name ASC, middle_name ASC")

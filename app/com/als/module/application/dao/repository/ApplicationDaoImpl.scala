@@ -71,11 +71,7 @@ object ApplicationDaoImpl {
     """
       | UPDATE users
       | SET
-      |   password={password},   first_name={firstName},  middle_name= {middleName},
-      |   last_name={lastName},  email={email},   phone={phone},   mobile={mobile},   skype={skype},   notes={notes},
-      |   is_credit_officer={isCreditOfficer}, change_password_on_next_login={changePasswordOnNextLogin}, top_visible_node_id={topVisibleNodeId}
       | WHERE
-      |   id={id}
     """.
       stripMargin)
 

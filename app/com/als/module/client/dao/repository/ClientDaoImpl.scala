@@ -64,21 +64,11 @@ object ClientDaoImpl {
     """
       | UPDATE users
       | SET
-      |   password={password},   first_name={firstName},  middle_name= {middleName},
-      |   last_name={lastName},  email={email},   phone={phone},   mobile={mobile},   skype={skype},   notes={notes},
-      |   is_credit_officer={isCreditOfficer}, change_password_on_next_login={changePasswordOnNextLogin}, top_visible_node_id={topVisibleNodeId}
-      | WHERE
-      |   id={id}
     """.
       stripMargin)
 
   val SELECT_FROM_USERS =
     """
-      | SELECT
-      |   users.* ,
-      |   org.parent_id AS parent_organization_node_id
-      | FROM users
-      | JOIN organisation_structure_nodes AS org ON org.id=users.organisation_structure_node_id
       | """.
       stripMargin
 
